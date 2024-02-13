@@ -1,0 +1,14 @@
+kind: KafkaTopic
+apiVersion: kafka.strimzi.io/v1beta2
+metadata:
+  name: poc-topic-1
+  labels:
+    strimzi.io/cluster: amq-streams-lab
+  namespace: kafka-cluster-1
+spec:
+  partitions: 1
+  replicas: 3
+  topicName: poc-topic-1
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824
