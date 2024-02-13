@@ -2,21 +2,19 @@ kind: Pod
 apiVersion: v1
 metadata:
   name: kafka-temp
-  namespace: kafka-cluster-2
+  labels:
+    run: kafka-temp
 spec:
+  securityContext: #3
+     privileged: true
+     runAsUser: 0
   restartPolicy: Never
   serviceAccountName: amq-streams-lab-kafka
-  imagePullSecrets:
-    - name: default-dockercfg-t2vgh
   priority: 0
   schedulerName: default-scheduler
   enableServiceLinks: true
   terminationGracePeriodSeconds: 30
   preemptionPolicy: PreemptLowerPriority
-  nodeName: ip-10-0-140-152.us-east-2.compute.internal
-  securityContext:
-    seLinuxOptions:
-      level: 's0:c26,c10'
   containers:
     - resources:
         limits:
@@ -26,19 +24,23 @@ spec:
           cpu: 50m
           memory: 256Mi
       terminationMessagePath: /dev/termination-log
-      name: kafka-temp
+      name: pvc-transfer
       securityContext:
         capabilities:
           drop:
             - MKNOD
       imagePullPolicy: IfNotPresent
       volumeMounts:
-        - name: kube-api-access-vk8dz
+        - name: kube-api-access-5h4pd
           readOnly: true
-          mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          mountPath: /var/run/secrets/kubernetes.io/serviceaccount          
         - volumeMounts:
-          mountPath: "/var/lib/kafka/data-0"
-          name: kafka-0             
+          mountPath: "/var/lib/kafka0/data-0"
+          name: kafka-0      
+        - volumeMounts:
+          mountPath: "/var/lib/zookeeper"
+          name: zookeeper-0
+
       terminationMessagePolicy: File
       image: 'quay.io/strimzi/kafka:latest-kafka-3.6.0'
       args:
@@ -47,7 +49,7 @@ spec:
         - sleep 86400
   serviceAccount: default
   volumes:
-    - name: kube-api-access-vk8dz
+    - name: kube-api-access-5h4pd
       projected:
         sources:
           - serviceAccountToken:
@@ -72,7 +74,10 @@ spec:
         defaultMode: 420
     - name: kafka-0
       persistentVolumeClaim:  
-        claimName: data-0-amq-streams-lab-kafka-0          
+        claimName: data-0-amq-streams-lab-kafka-0  
+    - name: zookeeper-0
+      persistentVolumeClaim:  
+        claimName: data-amq-streams-lab-zookeeper-0
   dnsPolicy: ClusterFirst
   tolerations:
     - key: node.kubernetes.io/not-ready
