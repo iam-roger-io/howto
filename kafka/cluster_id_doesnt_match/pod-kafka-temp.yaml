@@ -15,6 +15,7 @@ spec:
   enableServiceLinks: true
   terminationGracePeriodSeconds: 30
   preemptionPolicy: PreemptLowerPriority
+  nodeName: ip-10-0-140-152.us-east-2.compute.internal
   containers:
     - resources:
         limits:
