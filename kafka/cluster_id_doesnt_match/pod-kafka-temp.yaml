@@ -13,7 +13,7 @@ spec:
   enableServiceLinks: true
   terminationGracePeriodSeconds: 30
   preemptionPolicy: PreemptLowerPriority
-  nodeName: <IFILL WITH WORKER NODE NAME>
+  nodeName: ip-10-0-140-152.us-east-2.compute.internal
   securityContext:
     seLinuxOptions:
       level: 's0:c26,c10'
