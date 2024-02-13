@@ -45,7 +45,7 @@ spec:
         - /bin/sh
         - '-c'
         - sleep 86400
-  serviceAccount: amq-streams-lab-kafka
+  serviceAccount: default
   volumes:
     - name: kube-api-access-vk8dz
       projected:
