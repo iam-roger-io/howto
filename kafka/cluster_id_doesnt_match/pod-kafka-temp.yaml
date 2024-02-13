@@ -5,7 +5,7 @@ metadata:
   namespace: kafka-cluster-2
 spec:
   restartPolicy: Never
-  serviceAccountName: default
+  serviceAccountName: amq-streams-lab-kafka
   imagePullSecrets:
     - name: default-dockercfg-t2vgh
   priority: 0
@@ -45,7 +45,7 @@ spec:
         - /bin/sh
         - '-c'
         - sleep 86400
-  serviceAccount: default
+  serviceAccount: amq-streams-lab-kafka
   volumes:
     - name: kube-api-access-vk8dz
       projected:
